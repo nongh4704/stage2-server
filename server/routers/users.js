@@ -2,6 +2,8 @@ const express = require("express");
 const isEmpty = require("lodash/isEmpty");
 const validator = require("validator");
 
+const sqlFn = require("../mysql/index");
+
 const router = express.Router();
 
 const validatorInput = (data) => {
@@ -34,7 +36,15 @@ router.post("/", (req, res) => {
     const result = validatorInput(req.body);
     console.log("result",result);
     if(result.isValid){
-        res.status(200).json({errorCode: 0});
+        const sql = "insert into users values (null, ?, ?, ?)";
+        const arr = [req.body.phone, req.body.email, req.body.password];
+        sqlFn(sql, arr, function(data){
+            if(data.affectedRows){
+                res.status(200).json({errorCode:0});
+            }else{
+                res.status(400).json({errorCode: 400, msg: "注册失败"});
+            }
+        });
     }else{
         res.status(400).json({
             errorCode: 400,
