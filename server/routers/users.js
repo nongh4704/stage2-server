@@ -32,7 +32,7 @@ const validatorInput = (data) => {
 }
 
 router.post("/", (req, res) => {
-    console.log("req data==", req.body);
+    // console.log("req data==", req.body);
     const result = validatorInput(req.body);
     console.log("result",result);
     if(result.isValid){
@@ -52,5 +52,18 @@ router.post("/", (req, res) => {
         });
     }
 });
+
+router.get("/:phone", (req, res) => {
+    var sql = "select * from users where `phone` = ?";
+    var phone = req.params.phone;
+    let arr = [phone];
+    sqlFn(sql,arr, function(data){
+        if(data){
+            res.send(data)
+        }else{
+            res.send("");
+        }
+    });
+})
 
 module.exports = router;
