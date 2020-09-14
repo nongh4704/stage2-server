@@ -7,7 +7,7 @@ const router = express.Router();
 router.post("/", function(req, res){
     var sql = "select * from users where phone = ? && password = ?";
     var arr = [req.body.phone, req.body.password];
-    sqlFn(sql, arr, function(res){
+    sqlFn(sql, arr, function(data){
         if(res){
             res.send({errorCode: 0, msg: "登录成功"});
         }else{
